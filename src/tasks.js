@@ -1,6 +1,12 @@
-import { Dispatcher } from './flux/Dispatcher';
-import { UserPrefsStore } from './flux/UserPrefsStore';
-import { TasksStore } from './flux/TasksStore';
+import {
+    Dispatcher
+} from './flux/Dispatcher';
+import {
+    UserPrefsStore
+} from './flux/UserPrefsStore';
+import {
+    TasksStore
+} from './flux/TasksStore';
 
 console.log("Tasks - create tasksDispatcher = new Dispatcher()");
 const tasksDispatcher = new Dispatcher();
@@ -41,11 +47,15 @@ const completeTasksAction = function (id, isComplete) {
     };
 }
 
-const TaskComponent = ({content, complete, id}) => {
+const TaskComponent = ({
+    content,
+    complete,
+    id
+}) => {
     console.log("Tasks - TaskComponent = ({content, complete, id})");
 
     //this is kept in round bracket , so that whatever is pass will be returned automatically
-   return  `<section>
+    return `<section>
         ${content} <input type="checkbox" name="taskCompleteCheck" data-taskid=${id} ${complete ? "checked" : ""}> 
     </section>`
 }
@@ -60,9 +70,16 @@ const render = () => {
     const state = tasksStore.getState();
 
     //html that the tasks are going to be represented by on the page
+    //Example of map()
+    //var numbers = [1, 4, 9];
+    //var roots = numbers.map(Math.sqrt);
+    //roots is now [1, 2, 3]
+    //numbers is still [1, 4, 9]
+    //so get the filtered task , and execute the taskcomponent function on each tasks 
     const rendered = state.tasks
         .filter(task => state.showComplete ? true : !task.complete) //if showComplete = true,then return all tasks, else only return tasks that are not complete
-        .map(TaskComponent).join("");
+        .map(TaskComponent)//somecollection.map(fnToExecuteOnEachValueOfCollection)
+        .join(""); //The join() method joins all elements of an array (or an array-like object) into a string.
 
     tasksSection.innerHTML = rendered;
 
@@ -99,16 +116,18 @@ document.forms.newTask.addEventListener('submit', (e) => {
 });
 
 //Add Show Complete event - attach change event to showComplete HTML checkbox element defined in tasks.html
-document.getElementById(`showComplete`).addEventListener('change', ({target}) => {
+document.getElementById(`showComplete`).addEventListener('change', ({
+    target
+}) => {
     console.log("Tasks - getElementById(showComplete).addEventListener(change)");
     const showComplete = target.checked;
 
-     console.log("Tasks - getElementById(showComplete).addEventListener(change) - tasksDispatcher.dispatch(showTasksAction(showComplete))");
+    console.log("Tasks - getElementById(showComplete).addEventListener(change) - tasksDispatcher.dispatch(showTasksAction(showComplete))");
     tasksDispatcher.dispatch(showTasksAction(showComplete));
 });
 
 //Add Undo Action event -- attach submit event to undo HTML form element defined in tasks.html
-document.forms.undo.addEventListener('submit',(e)=>{
+document.forms.undo.addEventListener('submit', (e) => {
     console.log("Tasks - forms.undo.addEventListener(submit)");
     e.preventDefault();
 
@@ -118,9 +137,8 @@ document.forms.undo.addEventListener('submit',(e)=>{
 
 //tasksDispatcher.dispatch('TEST_DISPATCH');
 tasksStore.addListner(() => {
-     console.log("Tasks - tasksStore.addListner()");
+    console.log("Tasks - tasksStore.addListner()");
     render();
 });
 
 render();
-

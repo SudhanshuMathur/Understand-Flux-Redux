@@ -6,7 +6,9 @@ export class TasksStore extends ReduceStore {
     //override method of the base class(Store) 
     getInitialState() {
         console.log("TasksStore - getInitialState()");
+        //here state objet is {tasksArray, showComplete}
         return {
+            //tasks here is array of object {id, content,complete}
             tasks: [{
                 id: id(),
                 content: "Update CSS styles",
