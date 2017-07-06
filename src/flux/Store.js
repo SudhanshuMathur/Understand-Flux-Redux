@@ -14,6 +14,10 @@ export class Store {
         //console.log("Store - constructor(objDispatcher) - this.__onDispatch.bind(this)");
         //console.log(this.__onDispatch.bind(this));//here it will return a COPY of _onDispatch() method implemented inside UserPrefsStore class
        
+
+       //Why to use bind() here?? -- to do explicit binding (bound function), as Javascript has tendency to loose 'this'' binding when passed as callback.
+        //if we directly pass the this.__onDispatch, when it's called , it's this binding is lost and either fallback to global object/window or is undefined.
+        //this.__cbDispatcherListener = this.__onDispatch; // when method called , this = undefined , and throws error
         this.__cbDispatcherListener = this.__onDispatch.bind(this);
         objDispatcher.register(this.__cbDispatcherListener);
     }
